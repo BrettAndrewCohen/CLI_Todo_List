@@ -1,5 +1,7 @@
 <?php
 
+// array_values($array)
+
 // Create array to hold list of todo items
 $items = array();
 
@@ -36,6 +38,9 @@ do {
         $key = trim(fgets(STDIN));
         // Remove from array
         unset($items[--$key]);
+        // Reset all the items in the array to start at index 1
+        $items = array_values($items);
+
     }
 // Exit when input is (Q)uit
 } while(!($input == 'Q' || $input == 'q'));
