@@ -42,7 +42,37 @@ function sort_menu($items) {
     return $items;
 }
 
-// Create array to hold list of todo items
+function getfile($filename) {
+    $contents = [];
+    if (is_readable($filename)){
+        $handle = fopen($filename, 'r');
+        $bytes = filesize($filename);
+        $contents = fread($handle, $bytes);
+        fclose($handle);
+        $contents = explode("\n", $contents);
+
+    }
+    return $contents;
+} 
+
+function savefile($savefilepath, $array) {
+    $filename = $savefilepath;
+        if (is_writable($filename)) {
+            echo 'This file already exist. Are you sure you want to override and continue? Please type (Y)es or (N)o. ';
+            $input = get_input(TRUE);
+            if($input == 'Y'){
+            $handle = fopen($filename, 'w');
+                foreach($array as $items) {
+                    fwrite($handle, PHP_EOL . $items);
+                }
+            fclose($handle); 
+            echo 'Your changes were saved!' . PHP_EOL;
+            }
+            
+        }   
+}
+
+
 $items = array();
 
 // The loop!
@@ -52,7 +82,7 @@ do {
 echo list_items($items);
  
     // Show the menu options
-    echo '(N)ew item, (R)emove item, (Q)uit, (S)ort, : ';
+    echo '(N)ew item, (R)emove item, (Q)uit, (S)ort, (0)pen file, s(A)ve file : ';
 
     // Get the input from user
     // Use trim() to remove whitespace and newlines
@@ -87,6 +117,15 @@ echo list_items($items);
         array_shift($items);
     } elseif ($input == 'L') {
         array_pop($items);
+    } elseif ($input == 'O') {
+        echo 'What file would you like to open?';
+        $filename = get_input();
+        $array = getfile($filename);
+        $items = array_merge($items, $array);
+    } elseif ($input == 'A') {
+        echo 'Please enter the path to a file to have it save';
+        $savefilepath = get_input();
+        savefile($savefilepath, $items);
     }
 
 // Exit when input is (Q)uit
