@@ -17,12 +17,6 @@ function get_input($upper = false) {
     $result = trim(fgets(STDIN));
     return $upper ? strtoupper($result) : $result;
 
-    // if ($upper) {
-    // return strtoupper($result);
-    // } 
-    // else {
-    // return $result;
-    // }
 }
 
 function sort_menu($items) {
@@ -69,6 +63,13 @@ function savefile($savefilepath, $array) {
             echo 'Your changes were saved!' . PHP_EOL;
             }
             
+        } else {
+            $handle = fopen($filename, 'w');
+                foreach($array as $items) {
+                    fwrite($handle, PHP_EOL . $items);
+                }
+            fclose($handle); 
+            echo 'Your changes were saved!' . PHP_EOL;
         }   
 }
 
